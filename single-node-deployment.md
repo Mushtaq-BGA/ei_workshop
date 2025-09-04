@@ -3,18 +3,17 @@
 This guide provides step-by-step instructions to deploy Intel® AI for Enterprise Inference on a Single Node.
 
 ## Prerequisites
-Before running the automation, ensure you have the following:
-
-1. **Ubuntu 22.04 Server**: A machine with Ubuntu 22.04 installed where this automation will run, That's it.
+Before running the EI stack automation, we need to have Intel Xeon/Gaudi machine, For this hands-on excercise we will be providing AWS EC2 instances for participants
 
 ## EC2 instances
-For this excercise we will be using the EC2 instance type `i7ie` already created and installed with prerequisites.
+**The EC2 instance type `i7ie` is already created and installed with prerequisites.**
 
-In order to login to EC2 instance you need to have ssh client software installed on your local machine.     
-For ease of use we have hosted VSCode on AWS instance and dono't need to install any software on your local machine.
+In order to login to EC2 instance you need to have ssh client software installed on your local machine. For ease of use we have hosted VSCode on AWS instance and you don't have to install any software on your local machine.   
+
+Let's get started, please go through the instructions carefully
 
 ### Step 1: Login to VSCode
-Here are the links to launch your instance of VSCode:
+Here are the links to launch your instance of VSCode, each user can pick one instance:
 
 
 [user1](http://52.24.245.243:9001/)       
@@ -28,19 +27,20 @@ Here are the links to launch your instance of VSCode:
 [user9](http://52.24.245.243:9009/)     
 [user10](http://52.24.245.243:9010/)      
 
-#### NOTE: Each instance having login page with username displayed and password is same as the username.
+### NOTE: Each instance having login page with username displayed and **password is same as the username**.
 
 ### Step 2: Login to EC2 instance
 
 once you have logged in to VSCode, open the terminal and run below command to login to the instance.
+![<img src="image.png" width="300" height="250"/>]
 
 ```
-ssh -i ~/keys/your_key.pem ubuntu@your_instance_ip
+ssh -i aws_key/workshops.pem ubuntu@<EC2-IP>
 ```
-
+![alt text](image-1.png)
 
 ## Setting Up the Enterprise Inference stack
-We'll do all this steps on ec2 instance we just logged in from VSCode terminal.
+We'll do all this below mentioned steps on **EC2 instance** we just launched from VSCode terminal.
 
 We are using "api.example.com" for this setup, follow steps below:
 
