@@ -32,7 +32,7 @@ Here are the links to launch your instance of VSCode, each user can pick one ins
 ### Step 2: Login to EC2 instance
 
 once you have logged in to VSCode, open the terminal and run below command to login to the instance.
-![<img src="image.png" width="300" height="250"/>]
+![<img src="image.png" width="400" height="350"/>]
 
 ```
 ssh -i aws_key/workshops.pem ubuntu@<EC2-IP>
