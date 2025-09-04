@@ -5,10 +5,44 @@ This guide provides step-by-step instructions to deploy Intel® AI for Enterpris
 ## Prerequisites
 Before running the automation, ensure you have the following:
 
-1. **Ubuntu 22.04 Server**: A machine with Ubuntu 22.04 installed where this automation will run, That't it.
+1. **Ubuntu 22.04 Server**: A machine with Ubuntu 22.04 installed where this automation will run, That's it.
 
-## Setting Up on Ubuntu 22.04
-We'll use api.example.com for this setup, follow steps below:
+## EC2 instances
+For this excercise we will be using the EC2 instance type `i7ie` already created and installed with prerequisites.
+
+In order to login to EC2 instance you need to have ssh client software installed on your local machine.     
+For ease of use we have hosted VSCode on AWS instance and dono't need to install any software on your local machine.
+
+### Step 1: Login to VSCode
+Here are the links to launch your instance of VSCode:
+
+
+[user1](http://52.24.245.243:9001/)       
+[user2](http://52.24.245.243:9002/)       
+[user3](http://52.24.245.243:9003/)       
+[user4](http://52.24.245.243:9004/)     
+[user5](http://52.24.245.243:9005/)     
+[user6](http://52.24.245.243:9006/)     
+[user7](http://52.24.245.243:9007/)     
+[user8](http://52.24.245.243:9008/)     
+[user9](http://52.24.245.243:9009/)     
+[user10](http://52.24.245.243:9010/)      
+
+#### NOTE: Each instance having login page with username displayed and password is same as the username.
+
+### Step 2: Login to EC2 instance
+
+once you have logged in to VSCode, open the terminal and run below command to login to the instance.
+
+```
+ssh -i ~/keys/your_key.pem ubuntu@your_instance_ip
+```
+
+
+## Setting Up the Enterprise Inference stack
+We'll do all this steps on ec2 instance we just logged in from VSCode terminal.
+
+We are using "api.example.com" for this setup, follow steps below:
 
 ### Step 1: Modify the hosts file
 Since we are testing locally, we need to map a fake domain (`api.example.com`) to `localhost` in the `/etc/hosts` file.
@@ -90,13 +124,26 @@ export KEYCLOAK_CLIENT_ID=api
 export KEYCLOAK_CLIENT_SECRET=$(bash scripts/keycloak-fetch-client-secret.sh api.example.com api-admin 'changeme!!' api | awk -F': ' '/Client secret:/ {print $2}')
 export TOKEN=$(curl -k -X POST $BASE_URL/token  -H 'Content-Type: application/x-www-form-urlencoded' -d "grant_type=client_credentials&client_id=${KEYCLOAK_CLIENT_ID}&client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r .access_token)
 ```
+we can use curl commands to test the deployment or we can have openweb ui to chat with the models we just deployed.
 
-To test on CPU only deployment
+To test CPU Inference with curl
 ```
 curl -k ${BASE_URL}/Meta-Llama-3.1-8B-Instruct-vllmcpu/v1/completions -X POST -d '{"model": "meta-llama/Meta-Llama-3.1-8B-Instruct", "prompt": "What is Deep Learning?", "max_tokens": 25, "temperature": 0}' -H 'Content-Type: application/json' -H "Authorization: Bearer $TOKEN"
 ```
+To test on CPU Inference with openwebui follow below steps:
 
-To test on GPU only deployment
 ```
-curl -k ${BASE_URL}/Meta-Llama-3.1-8B-Instruct/v1/completions -X POST -d '{"model": "meta-llama/Meta-Llama-3.1-8B-Instruct", "prompt": "What is Deep Learning?", "max_tokens": 25, "temperature": 0}' -H 'Content-Type: application/json' -H "Authorization: Bearer $TOKEN"
+# Install OpenWebUI
+helm repo add open-webui https://helm.openwebui.com/
+helm repo update
+helm install open-webui open-webui/open-webui --namespace open-webui --create-namespace
+
+# check is the pod is up and running
+kubectl get pods -n open-webui
+
+# Port forward to access OpenWebUI
+kubectl port-forward -n open-webui svc/open-webui 7070:80
+
+# Access 
+kubectl get svc
 ```
